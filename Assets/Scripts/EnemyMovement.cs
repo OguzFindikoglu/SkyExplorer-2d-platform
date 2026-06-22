@@ -17,7 +17,7 @@ public class EnemyMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Başlangıç noktasından moveDistance kadar uzaklaştıysa dön
+        // Başlangıç noktasından moveDistance kadar uzaklaştıysa dön.
         if (transform.position.x > startPos.x + moveDistance && direction == 1)
             Flip();
         else if (transform.position.x < startPos.x - moveDistance && direction == -1)
