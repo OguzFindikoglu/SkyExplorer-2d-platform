@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed = 8f;
     public float jumpForce = 14f;
 
-    [Header("Zemin Kontrolü")]
+    [Header("Zemin Kontrolï¿½")]
     public Transform groundCheck;
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
@@ -23,7 +23,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // Panel açýksa hiçbir þey yapma (zýplama, yön yok)
+        if (InfoPanel.IsOpen || DeathScreen.IsDead) { moveInput = 0f; return; }
+        // Panel aï¿½ï¿½ksa hiï¿½bir ï¿½ey yapma (zï¿½plama, yï¿½n yok)
         if (InfoPanel.IsOpen)
         {
             moveInput = 0f;
@@ -31,9 +32,9 @@ public class PlayerMovement : MonoBehaviour
         }
 
         var keyboard = Keyboard.current;
-        if (keyboard == null) return;   // klavye yoksa çýk
+        if (keyboard == null) return;   // klavye yoksa ï¿½ï¿½k
 
-        // Yatay girdi: A/D ya da sol/sað ok
+        // Yatay girdi: A/D ya da sol/saï¿½ ok
         moveInput = 0f;
         if (keyboard.aKey.isPressed || keyboard.leftArrowKey.isPressed) moveInput = -1f;
         else if (keyboard.dKey.isPressed || keyboard.rightArrowKey.isPressed) moveInput = 1f;
@@ -41,13 +42,13 @@ public class PlayerMovement : MonoBehaviour
         // Zeminde miyiz?
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
-        // Sadece zemindeyken zýpla (Space tuþu)
+        // Sadece zemindeyken zï¿½pla (Space tuï¿½u)
         if (keyboard.spaceKey.wasPressedThisFrame && isGrounded)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
 
-        // Karaktere yön ver
+        // Karaktere yï¿½n ver
         if (moveInput > 0.01f)
             transform.localScale = new Vector3(5, 5, 1);
         else if (moveInput < -0.01f)
@@ -56,7 +57,8 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Panel açýksa hareket etme
+        if (InfoPanel.IsOpen || DeathScreen.IsDead) { rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y); return; }
+        // Panel aï¿½ï¿½ksa hareket etme
         if (InfoPanel.IsOpen)
         {
             rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);

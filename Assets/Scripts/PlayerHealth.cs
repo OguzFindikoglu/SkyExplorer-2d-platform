@@ -2,21 +2,18 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public int maxHealth = 6;        // 3 kalp = 6 yarım (her kalp 2 birim)
+    public int maxHealth = 6;
     public int currentHealth;
-
-    private PlayerRespawn respawn;
+    public DeathScreen deathScreen;   // Ã¶lÃ¼m ekranÄ± referansÄ±
 
     void Start()
     {
         currentHealth = maxHealth;
-        respawn = GetComponent<PlayerRespawn>();
     }
 
     public void TakeDamage(int amount)
     {
         currentHealth -= amount;
-
         if (currentHealth <= 0)
         {
             currentHealth = 0;
@@ -26,10 +23,8 @@ public class PlayerHealth : MonoBehaviour
 
     void Die()
     {
-        // Başa dön ve canı yenile
-        if (respawn != null)
-            respawn.Respawn();
-        currentHealth = maxHealth;
+        if (deathScreen != null)
+            deathScreen.ShowDeathScreen();   // direkt respawn yerine Ã¶lÃ¼m ekranÄ±
     }
 
     public void ResetHealth()
