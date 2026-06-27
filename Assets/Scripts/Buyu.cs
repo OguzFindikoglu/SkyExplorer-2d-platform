@@ -2,26 +2,35 @@ using UnityEngine;
 
 public class Buyu : MonoBehaviour
 {
-    public float speed = 10f;      // büyünün hızı
-    public float lifeTime = 3f;    // kaç saniye sonra kendini yok etsin
-    public int direction = 1;      // 1 sağ, -1 sol
+    public float speed = 10f;
+    public float lifeTime = 3f;
+    public int direction = 1;              // eski yatay yön (oyuncu için, bozulmasın)
+    public Vector2 moveDirection = Vector2.zero;  // yeni: serbest yön (boss için)
 
     private Rigidbody2D rb;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        rb.linearVelocity = new Vector2(direction * speed, 0f);   // ileri uç
-        Destroy(gameObject, lifeTime);   // belirli süre sonra yok ol
+        
+
+        // Eğer moveDirection ayarlanmışsa onu kullan (boss: çapraz/yukarı)
+        // Ayarlanmamışsa eski yatay direction'ı kullan (oyuncu: sağa/sola)
+        if (moveDirection != Vector2.zero)
+            rb.linearVelocity = moveDirection.normalized * speed;
+        else
+            rb.linearVelocity = new Vector2(direction * speed, 0f);
+
+        Destroy(gameObject, lifeTime);
     }
 
     void OnTriggerEnter2D(Collider2D other)
 {
-    // Oyuncuya çarpmayı yok say
     if (other.CompareTag("Player")) return;
 
-    // Bir şeye çarptı → büyüyü yok et
+    // Çarptığım şey başka bir mermiyse (Buyu scripti varsa) yok say
+    if (other.GetComponent<Buyu>() != null) return;
+
     Destroy(gameObject);
 }
-    
 }
