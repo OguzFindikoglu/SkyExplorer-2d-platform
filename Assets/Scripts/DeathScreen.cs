@@ -1,33 +1,35 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class DeathScreen : MonoBehaviour
 {
-    public GameObject deathPanel;     // ölüm ekranı paneli (DeathScreen objesi)
+    public GameObject deathPanel;
     public PlayerRespawn playerRespawn;
     public PlayerHealth playerHealth;
+
+    public bool sahneyiYenidenYukle = false;   // BossLevel'de true yapacağız
 
     public static bool IsDead = false;
 
     void Start()
     {
         if (deathPanel != null)
-            deathPanel.SetActive(false);   // başta gizli
+            deathPanel.SetActive(false);
         IsDead = false;
+        Time.timeScale = 1f;   // sahne yeniden yüklenince zaman normale dönsün
     }
 
-    // Ölüm anında çağrılacak
     public void ShowDeathScreen()
     {
         IsDead = true;
         if (deathPanel != null)
             deathPanel.SetActive(true);
-            Time.timeScale = 0f;
+        Time.timeScale = 0f;
     }
 
     void Update()
     {
-        // Ölüyken Space'e basınca yeniden doğ
         if (IsDead && Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
         {
             Respawn();
@@ -37,10 +39,18 @@ public class DeathScreen : MonoBehaviour
     void Respawn()
     {
         IsDead = false;
+        Time.timeScale = 1f;
+
+        if (sahneyiYenidenYukle)
+        {
+            // Tüm sahneyi baştan yükle (boss dahil her şey resetlenir)
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            return;
+        }
+
+        // Eski davranış (Level1: sadece oyuncuyu resetle)
         if (deathPanel != null)
             deathPanel.SetActive(false);
-        Time.timeScale = 1f;    
-
         if (playerRespawn != null)
             playerRespawn.Respawn();
         if (playerHealth != null)

@@ -1110,6 +1110,7 @@ MonoBehaviour:
   deathPanel: {fileID: 1279137018}
   playerRespawn: {fileID: 2144176400}
   playerHealth: {fileID: 2144176402}
+  sahneyiYenidenYukle: 0
 --- !u!1 &839570373
 GameObject:
   m_ObjectHideFlags: 0

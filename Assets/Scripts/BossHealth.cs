@@ -43,8 +43,12 @@ public class BossHealth : MonoBehaviour
 }
 
     void Die()
-    {
-        Debug.Log("Boss öldü!");
-        Destroy(gameObject);
-    }
+{
+    Debug.Log("Boss öldü!");
+
+    WinScreen win = FindObjectOfType<WinScreen>();
+    if (win != null) win.ShowWinScreen();
+
+    Destroy(gameObject);
+}
 }
